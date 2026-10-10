@@ -16,21 +16,23 @@ export default function RecoverPasswordModal({ open, onClose }) {
 
   return (
     <Modal open={open} onClose={close}>
-      {step === 1 && (
-        <RecoverEmailGet
-          onClose={close}
-          onSuccess={(e) => { setEmail(e); setStep(2); }}
-        />
-      )}
-      {step === 2 && (
-        <VerifyCode
-          email={email}
-          onSuccess={() => setStep(3)}
-          onClose={close}
-          onBack={() => setStep(1)}
-        />
-      )}
-      {step === 3 && <ResetPassword email={email} onSuccess={close} onBack={() => setStep(1)} />}
-    </Modal>
+  <div key={step} className="step-transition">
+    {step === 1 && (
+      <RecoverEmailGet
+        onClose={close}
+        onSuccess={(e) => { setEmail(e); setStep(2); }}
+      />
+    )}
+    {step === 2 && (
+      <VerifyCode
+        email={email}
+        onSuccess={() => setStep(3)}
+        onClose={close}
+        onBack={() => setStep(1)}
+      />
+    )}
+    {step === 3 && <ResetPassword email={email} onSuccess={close} onBack={() => setStep(1)} />}
+  </div>
+</Modal>
   );
 }

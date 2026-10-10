@@ -133,11 +133,9 @@ export function VerifyCode({ email, onSuccess, onClose, onBack }) {
 
           </div>
 
-          {errorMessage && (
-            <p className="error-message-VerifyCode">
-              {errorMessage}
-            </p>
-          )}
+        <p className="error-message-VerifyCode">
+  {errorMessage}
+</p>
 
           <button type="submit" className="submit-button-VerifyCode">
             Verificar código
