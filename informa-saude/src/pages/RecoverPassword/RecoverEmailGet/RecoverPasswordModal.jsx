@@ -23,10 +23,14 @@ export default function RecoverPasswordModal({ open, onClose }) {
         />
       )}
       {step === 2 && (
-        <VerifyCode email={email} onSuccess={() => setStep(3)} onClose={close} />
+        <VerifyCode
+          email={email}
+          onSuccess={() => setStep(3)}
+          onClose={close}
+          onBack={() => setStep(1)}
+        />
       )}
-      {step === 3 && <ResetPassword email={email} onSuccess={close} onBack={() => setStep(1) } />}
-
+      {step === 3 && <ResetPassword email={email} onSuccess={close} onBack={() => setStep(1)} />}
     </Modal>
   );
 }

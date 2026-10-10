@@ -1,31 +1,58 @@
 import React, { useState } from 'react'
 import './NewPassword.css'
 
+function EyeIcon({ open }) {
+  if (open) {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  )
+}
 
 function ResetPassword({ onSuccess, onClose, onBack }) {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
- const handleSubmit = (e) => {
-  e.preventDefault()
-  e.stopPropagation()
+  const isStrongPassword = (password) =>
+    password.length >= 6 &&
+    /[@#%*]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /\d/.test(password)
 
-  if (newPassword.length < 8) {
-    setErrorMessage('A senha deve ter no mínimo 8 dígitos.')
-    return
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!isStrongPassword(newPassword)) {
+      setErrorMessage('A senha precisa ter no mínimo 6 caracteres, 1 símbolo (@#%*), uma letra maiúscula, uma minúscula e um número.')
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      setErrorMessage('As senhas não coincidem!')
+      return
+    }
+
+    setErrorMessage('')
+    setIsSuccessModalOpen(true)
   }
-
-  if (newPassword !== confirmPassword) {
-    setErrorMessage('As senhas não coincidem!')
-    return
-  }
-
-  setErrorMessage('')
-  setIsSuccessModalOpen(true)
-}
 
   const handleModalContinue = () => {
     setIsSuccessModalOpen(false)
@@ -34,13 +61,13 @@ function ResetPassword({ onSuccess, onClose, onBack }) {
 
   return (
     <div className="reset-container">
-     <button type="button" className="btn-back" onClick={onBack}>
-  &#8249;
-</button>
+      <button type="button" className="btn-back" onClick={onBack}>
+        &#8249;
+      </button>
 
       <h2 className="title">Digite uma nova senha</h2>
       <p className="subtitle">
-        Digite sua nova senha. Ela deve ter no mínimo 8 dígitos.
+        Digite sua nova senha.
       </p>
 
       <form onSubmit={handleSubmit} className="reset-form">
@@ -48,7 +75,7 @@ function ResetPassword({ onSuccess, onClose, onBack }) {
           <label>Digite sua nova senha</label>
           <div className="input-wrapper">
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showNewPassword ? 'text' : 'password'}
               placeholder="Digite sua nova senha"
               value={newPassword}
               onChange={(e) => {
@@ -60,9 +87,10 @@ function ResetPassword({ onSuccess, onClose, onBack }) {
             <button
               type="button"
               className="toggle-eye"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowNewPassword(!showNewPassword)}
+              aria-label={showNewPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
-              👁
+              <EyeIcon open={showNewPassword} />
             </button>
           </div>
         </div>
@@ -71,7 +99,7 @@ function ResetPassword({ onSuccess, onClose, onBack }) {
           <label>Confirme sua nova senha</label>
           <div className="input-wrapper">
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showConfirmPassword ? 'text' : 'password'}
               placeholder="Confirme sua nova senha"
               value={confirmPassword}
               onChange={(e) => {
@@ -83,9 +111,10 @@ function ResetPassword({ onSuccess, onClose, onBack }) {
             <button
               type="button"
               className="toggle-eye"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              aria-label={showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
-              👁
+              <EyeIcon open={showConfirmPassword} />
             </button>
           </div>
         </div>

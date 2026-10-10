@@ -12,4 +12,6 @@
   max-height: 90vh;
   overflow: auto;
   border-radius: 16px;
+   scrollbar-width: none;
+  -ms-overflow-style: none; 
 }

@@ -2,12 +2,11 @@ import React, { useState, useRef } from 'react'
 import './Codeverify.css'
 import { verificarCodigoTeste } from '../test/code'
 
-export function VerifyCode({ email, onSuccess, onClose }) {
+export function VerifyCode({ email, onSuccess, onClose, onBack }) {
   const [code, setCode] = useState(['', '', '', '', ''])
   const [errorMessage, setErrorMessage] = useState('')
   const [status, setStatus] = useState('idle')
   const [isModalOpen, setIsModalOpen] = useState(false)
-
 
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)]
 
@@ -48,7 +47,7 @@ export function VerifyCode({ email, onSuccess, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    e.stopPropagation() 
+    e.stopPropagation()
     const fullCode = code.join('')
 
     if (fullCode.length < 5) {
@@ -85,9 +84,9 @@ export function VerifyCode({ email, onSuccess, onClose }) {
     <div className="verify-container-VerifyCode">
       <div className="verify-card-VerifyCode">
 
-        <button type="button" className="back-button-VerifyCode" onClick={onClose}>
-          &#10094;
-        </button>
+        <button type="button" className="back-button-VerifyCode" onClick={onBack}>
+  &#10094;
+</button>
 
         <h1 className="title-VerifyCode">Digite seu código</h1>
         <p className="subtitle-VerifyCode">
@@ -155,7 +154,7 @@ export function VerifyCode({ email, onSuccess, onClose }) {
             Reenviar código
           </button>
           <br />
-          <button type="button" className="resend-link-VerifyCode" onClick={onClose}>
+          <button type="button" className="resend-link-VerifyCode" onClick={onBack}>
             Tentar outro e-mail
           </button>
         </div>
